@@ -1,0 +1,19 @@
+.container { 
+    padding-top: 35px; 
+    padding-bottom: 35px;
+}
+
+.row { 
+    padding-bottom: 35px;
+}
+
+body {
+    background-image: url("background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.image:active{
+    transform: scale(.95);
+}
