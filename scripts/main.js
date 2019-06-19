@@ -17,7 +17,7 @@ const backPic = "img/purple_back.png";
 var firstCard, secondCard;
 var disabledBoard = false;
 var oneFlippedCard = false;
-var coefficient = 24;
+var coefficient = 128;
 
 class Card {
   constructor(number, frontPic) {
@@ -32,6 +32,7 @@ startTag.onclick = function(e){
   startTag.disabled = true;
   document.getElementById("board").scrollIntoView();
   score = 0;
+  document.getElementById("score").innerHTML = score;
   play();
 }
 
@@ -101,6 +102,7 @@ function play(){
         return v.flipped == true;})){
         startTag.disabled = false;
         resetBoard();
+        document.getElementById("hidden-btn").click();
         setTimeout(function(){
           for(i = 0; i < 12; i++){
           cards[i].flipped = true;
