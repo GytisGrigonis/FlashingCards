@@ -3,17 +3,40 @@
     padding-bottom: 35px;
 }
 
-.row { 
-    padding-bottom: 35px;
+.image{
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 body {
     background-image: url("img/background.jpg");
     background-position: center;
-    background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 }
 
 .image:active{
     transform: scale(.95);
+}
+
+.jumbotron{
+    padding-bottom: 15px;
+}
+
+.mx-auto{
+    width: 300px;
+}
+
+#start-btn{
+    background-color: rgb(112, 44, 141);
+}
+
+.points {
+    text-align: right;
+    color: white;
+    margin-right: 1rem;
+}
+
+html{
+    scroll-behavior: smooth;
 }

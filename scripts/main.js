@@ -9,10 +9,15 @@ function shuffle(a) {
   return a;
 }
 
-var num = 1;
+var numberFlipped = 0, score = 0;
+var num = 0;
 var cards = [];
 var i;
 const backPic = "img/purple_back.png";
+var firstCard, secondCard;
+var disabledBoard = false;
+var oneFlippedCard = false;
+var coefficient = 24;
 
 class Card {
   constructor(number, frontPic) {
@@ -20,11 +25,17 @@ class Card {
     this.frontPic = frontPic;
     this.flipped = false;
   }
+}
 
+var startTag = document.getElementById("start-btn");
+startTag.onclick = function(e){
+  startTag.disabled = true;
+  document.getElementById("board").scrollIntoView();
+  score = 0;
+  play();
 }
 
 var frontPics = [
-  "img/purple_back.png",
   "img/card1.png",
   "img/card2.png",
   "img/card3.png",
@@ -33,18 +44,12 @@ var frontPics = [
   "img/card6.png"
 ];
 
-cards.push(new Card(num, frontPics[0]));
-
-for(i = 1; i <= 12; i++){
+for(i = 0; i < 12; i++){
   cards.push(new Card(num, frontPics[num]));
-  if(i%2 == 0) num++;
+  if(i%2 == 1) num++;
 }
 
-
 cards = shuffle(cards);
-var firstCard, secondCard;
-var disabledBoard = false;
-var oneFlippedCard = false;
 
 function resetBoard(){
   firstCard = null;
@@ -53,33 +58,58 @@ function resetBoard(){
   oneFlippedCard = false;
 }
 
-for(i = 1; i <= 12; i++){
-  var cardTag = document.getElementById(i);
-  cardTag.onclick = function(e) {
-    if(disabledBoard) return;
-    if(cards[this.id].flipped) return;
-    if(!oneFlippedCard){
-      oneFlippedCard = true;
-      firstCard = this;
-      firstCard.src = cards[firstCard.id].frontPic;
-      return;
-    }
+function play(){
+  for(i = 0; i < 12; i++){
+    var cardTag = document.getElementById(i);
+    cardTag.onclick = function(e) {
+      if(disabledBoard) return;
+      if(cards[this.id].flipped) return;
+      if(!oneFlippedCard){
+        oneFlippedCard = true;
+        firstCard = this;
+        firstCard.src = cards[firstCard.id].frontPic;
+        cards[firstCard.id].flipped = true;
+        numberFlipped++;
+        return;
+      }
 
-    secondCard = this;
-    secondCard.src = cards[secondCard.id].frontPic;
+      secondCard = this;
+      secondCard.src = cards[secondCard.id].frontPic;
 
-    if(cards[firstCard.id].number == cards[secondCard.id].number){
-      cards[firstCard.id].flipped = true;
-      cards[secondCard.id].flipped = true;
-      resetBoard();
-    }
-    else{
-      disabledBoard = true;
-      setTimeout(() => {
-        firstCard.src = backPic;
-        secondCard.src = backPic;
+      if(cards[firstCard.id].number == cards[secondCard.id].number){
+        cards[firstCard.id].flipped = true;
+        cards[secondCard.id].flipped = true;
         resetBoard();
-      }, 1500);
+        score += Math.floor(coefficient/numberFlipped);
+        coefficient = coefficient/2;
+        document.getElementById("score").innerHTML = score;
+        numberFlipped = 0;
+      }
+      else{
+        disabledBoard = true;
+        numberFlipped++;
+        setTimeout(() => {
+          firstCard.src = backPic;
+          secondCard.src = backPic;
+          resetBoard();
+        }, 500);
+        cards[firstCard.id].flipped = false;
+        cards[secondCard.id].flipped = false;
+      }
+
+      if(cards.every(function(v){
+        return v.flipped == true;})){
+        startTag.disabled = false;
+        resetBoard();
+        setTimeout(function(){
+          for(i = 0; i < 12; i++){
+          cards[i].flipped = true;
+          var cardTag = document.getElementById(i);
+          cardTag.src = backPic;
+        }}, 1500)
+        cards = shuffle(cards);
+        numberFlipped = 0;
+      }
     }
   }
 }
