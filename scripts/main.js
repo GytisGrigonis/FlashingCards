@@ -30,8 +30,8 @@ class Card {
 var startTag = document.getElementById("start-btn");
 startTag.onclick = function(e){
   startTag.disabled = true;
+  for(i = 0; i < 12; i++) cards[i].flipped = false;
   document.getElementById("board").scrollIntoView();
-  score = 0;
   document.getElementById("score").innerHTML = score;
   play();
 }
@@ -99,18 +99,24 @@ function play(){
       }
 
       if(cards.every(function(v){
-        return v.flipped == true;})){
+        return v.flipped == true;}))
+        {
         startTag.disabled = false;
         resetBoard();
+        document.getElementById("scoreModal").innerHTML = score;
         document.getElementById("hidden-btn").click();
         setTimeout(function(){
           for(i = 0; i < 12; i++){
           cards[i].flipped = true;
           var cardTag = document.getElementById(i);
           cardTag.src = backPic;
-        }}, 1500)
+          }
+        }, 1500)
+
         cards = shuffle(cards);
         numberFlipped = 0;
+        score = 0;
+        document.getElementById("score").innerHTML = score;
       }
     }
   }
